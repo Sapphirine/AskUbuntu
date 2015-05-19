@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Big Data</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset-fonts/reset-fonts.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
+    <link href="http://fonts.googleapis.com/css?family=Brawler" rel="stylesheet" type="text/css">
+    <link href="_static/master.css" rel="stylesheet" type="text/css">
+    <link href="_static/subpage.css" rel="stylesheet" type="text/css">
+    <link href="_static/s.css" rel="stylesheet" type="text/css">
+    <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+<script>
+$(function(){            
+ ('#myTags').tagit({
+    afterTagAdded: function(evt, ui) {
+      if (!ui.duringInitialization) {
+        t = $('#myTags').tagit('tagLabel', ui.tag);
+        $.getJSON('calcStation.php?search=',{keyword: t ,ajax: 'true'}, function(j){
+                for (var i = 0; i < j.length; i++) {
+                        $("#links").append('<table id="'+j.id+'"><tr><td><a href="http://askubuntu.com/questions/'+j.id+'" target="_blank">'+j.title+' ( '+j.rate+' )</a></td></tr></table>');
+                
+                }
+        });
+      }
+    },
+                
+    afterTagRemoved: function(evt, ui) {
+      if (!ui.duringInitialization) {
+        t = $('#myTags').tagit('tagLabel', ui.tag);
+        $("#"+t.id]).remove();
+      }            
+    }     
+  });
+});
+</script>
+</head>
+<body>
+<div id="wrapper"> 
+    <div id="content">
+        <hr>
+        <center>
+	  <img src="http://www.columbia.edu/files/columbia/content/identity-donot5.png"><br>
+	  Columbia University<br>Electrical Engineering - Big Data Analytics<br><br>
+	</center>
+        <form>
+            <p>
+                Write a Question:
+            </p>
+            <ul id="myTags"></ul>
+            <div id="links"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
